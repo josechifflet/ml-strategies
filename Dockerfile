@@ -8,7 +8,7 @@ RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN pip install numpy
 
-# Install Ta-lib
+# Install Ta-Lib
 RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
   tar -xvzf ta-lib-0.4.0-src.tar.gz && \
   cd ta-lib/ && \
@@ -21,7 +21,7 @@ RUN rm -R ta-lib ta-lib-0.4.0-src.tar.gz
 # Install pip dependencies
 RUN pip install \
     pandas \
-    pandas-ta \
+    pandas_ta \
     numpy \
     matplotlib \
     plotly \
@@ -34,7 +34,7 @@ RUN pip install \
     pyspark[pandas_on_spark] \
     scipy \
     cython \
-    ta-lib \
+    Ta-Lib \
     tensorflow \
     keras
 
