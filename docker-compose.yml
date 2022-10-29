@@ -1,18 +1,34 @@
 version: "3.7"
 services:
-  jupyter:
-    build:
+  jupyterlab:
+    # image: ghcr.io/maastrichtu-ids/jupyterlab:latest
+    build: 
       context: .
       dockerfile: Dockerfile
-    restart: always
-    container_name: jupyter-nb
+      # dockerfile: gpu.dockerfile
+      # args:
+      #   NVIDIA_IMAGE: nvcr.io/nvidia/tensorflow:21.11-tf2-py3
+
+    user: root
+    # user: "1000"
+    # user: ${UID}
     ports:
       - 8888:8888
     volumes:
-      - "./:/home/jovyan/work"
+      # Share volumes for jupyterlab and openrefine:
+      - ./data/workspace:/workspace
+      - ./data/work:/home/jovyan/work
+      - ./data/openrefine:/home/jovyan/openrefine
+      # Share your local nanopub keys to login auto with the Nanobench (experimental)
+      # - ${HOME}/.nanopub:/home/jovyan/.nanopub
+    
+    ## Without password:
+    # command: "--ServerApp.token=''"
     environment:
-      JUPYTER_TOKEN: '123456789'
-      JUPYTER_ENABLE_LAB: 'yes'
-
-volumes:
-  jupyter:
+      - GRANT_SUDO=yes
+      ## With password:
+      - JUPYTER_TOKEN=123456
+      ## Download repo:
+      # - GIT_URL=https://github.com/MaastrichtU-IDS/dsri-demo
+    
+    entrypoint: jupyter lab --allow-root --ip=0.0.0.0 --port=8888 --no-browser --config=/etc/jupyter/jupyter_notebook_config.py
